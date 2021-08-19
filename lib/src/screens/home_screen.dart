@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/blocks/application_block.dart';
+import 'package:places_autocomplete/models/place.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,6 +12,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Completer<GoogleMapController> _mapController = Completer();
+
+  late StreamSubscription locationSubscription;
+
+  @override
+  void initState() {
+    final applicationBlock =
+        Provider.of<ApplicationBlock>(context, listen: false);
+    StreamSubscription locationSubscription =
+        applicationBlock.selectedLocation.stream.listen((place) {
+      if (place != null) {
+        _goToPlace(place);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    final applicationBlock =
+        Provider.of<ApplicationBlock>(context, listen: false);
+    applicationBlock.dispose();
+    locationSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               applicationBlock.currentLocation.longitude),
                           zoom: 14,
                         ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController.complete(controller);
+                        },
                         mapType: MapType.normal,
                         myLocationButtonEnabled: true,
                       ),
@@ -74,6 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
+                                          onTap: () {
+                                            applicationBlock
+                                                .setSelectedLocation(
+                                                    applicationBlock
+                                                        .searchResults[index]
+                                                        .placeId);
+                                          },
                                         );
                                       }),
                                 )
@@ -87,9 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future<void> _goToPlace(Place place) async {
-  //   final GoogleMapController controller = await _mapController.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(
-  //       CameraPosition(target: LatLng(35.0, 75.0), zoom: 14)));
-  // }
+  Future<void> _goToPlace(Place place) async {
+    final GoogleMapController controller = await _mapController.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(
+          place.geometry.location.lat,
+          place.geometry.location.lng,
+        ),
+        zoom: 14)));
+  }
 }
