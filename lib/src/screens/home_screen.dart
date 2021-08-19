@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Completer<GoogleMapController> _mapController = Completer();
+  var _textController = TextEditingController();
 
   late StreamSubscription locationSubscription;
 
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    controller: _textController,
                     onChanged: (value) => applicationBlock.searchPlaces(value),
                     decoration: InputDecoration(
                         hintText: 'Search Location',
@@ -108,6 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     applicationBlock
                                                         .searchResults[index]
                                                         .placeId);
+                                            _textController.clear();
+                                            applicationBlock.placesService
+                                                .validResult = false;
                                           },
                                         );
                                       }),
