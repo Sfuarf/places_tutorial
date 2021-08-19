@@ -1,0 +1,142 @@
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:places_autocomplete/blocks/application_block.dart';
+import 'package:places_autocomplete/blocks/request_data.dart';
+import 'package:places_autocomplete/models/place_search.dart';
+import 'package:provider/provider.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Position currentPosition;
+  late List<PlaceSearch> searchResults;
+
+  bool updateMap = false;
+  bool locationFound = false;
+  bool autoCompleteDone = false;
+  bool updateAutocompleteList = false;
+
+  void getInitPosition() async {
+    currentPosition =
+        await GetDataFromGoogle.setCurrentPosition().then((value) {
+      locationFound = true;
+      return value;
+    });
+    if (locationFound) {
+      setState(() {
+        updateMap = true;
+        locationFound = false;
+      });
+    }
+
+    print(
+        'Lat: ${currentPosition.latitude} - Long: ${currentPosition.longitude}');
+  }
+
+  void getAutoCompleteResults(String currentSearch) async {
+    searchResults =
+        await GetDataFromGoogle.searchPlaces(currentSearch).then((value) {
+      autoCompleteDone = true;
+      return value;
+    });
+
+    if (autoCompleteDone) {
+      setState(() {
+        updateAutocompleteList = true;
+        autoCompleteDone = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final applicationBlock = Provider.of<ApplicationBlock>(context);
+
+    return Scaffold(
+        body: Column(children: [
+      Center(
+        child: IconButton(
+          icon: Icon(Icons.map),
+          onPressed: () {
+            if (updateMap) {
+              setState(() {
+                updateMap = false;
+              });
+            } else {
+              getInitPosition();
+            }
+          },
+        ),
+      ),
+      (!updateMap)
+          ? CircleAvatar()
+          : SizedBox(
+              height: 300,
+              child: ListView(children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) => getAutoCompleteResults(value),
+                    decoration: InputDecoration(
+                        hintText: 'Search Location',
+                        suffixIcon: Icon(Icons.search)),
+                  ),
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      height: 300.0,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(currentPosition.latitude,
+                              currentPosition.longitude),
+                          zoom: 14,
+                        ),
+                        mapType: MapType.normal,
+                        myLocationButtonEnabled: true,
+                      ),
+                    ),
+                    (!updateAutocompleteList)
+                        ? Container()
+                        : Container(
+                            child: (searchResults.length <= 0)
+                                ? Container()
+                                : Stack(
+                                    children: [
+                                      Container(
+                                        height: 300.0,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          backgroundBlendMode: BlendMode.darken,
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 300.0,
+                                        child: ListView.builder(
+                                            itemCount: searchResults.length,
+                                            itemBuilder: (contex, index) {
+                                              return ListTile(
+                                                title: Text(
+                                                  searchResults[index]
+                                                      .description,
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              );
+                                            }),
+                                      )
+                                    ],
+                                  ),
+                          )
+                  ],
+                ),
+              ]),
+            )
+    ]));
+  }
+}
