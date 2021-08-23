@@ -25,6 +25,8 @@ class ApplicationBlock with ChangeNotifier {
   late List<Marker> markers = [];
   String placeType = '';
 
+  String finalSelectedDestination = '';
+
   // This is a work-around! Needs to be fixed in the future!
   late Place initialPosition;
 
@@ -81,6 +83,8 @@ class ApplicationBlock with ChangeNotifier {
         Random random = new Random();
         int randomIndex = random.nextInt((value.length));
 
+        finalSelectedDestination = value[randomIndex].name;
+
         if (value.length > 0) {
           var newMarker =
               markerService.createMarkerFromPlace(value[randomIndex]);
@@ -102,6 +106,8 @@ class ApplicationBlock with ChangeNotifier {
       });
 
       notifyListeners();
+    } else {
+      finalSelectedDestination = '';
     }
   }
 
