@@ -53,6 +53,18 @@ class PlacesService {
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
     var jsonResults = json['results'] as List;
+    var jsonStatus = json['status'] as String;
+
+    // Adding error checking for UI reference
+    if (jsonStatus == 'OK') {
+      validResult = true;
+      print('The Places are Being Found!');
+      print(jsonResults.length);
+    }
+    if (jsonStatus == 'INVALID_REQUEST') {
+      validResult = false;
+      print('This is an invalid request');
+    }
     // var jsonStatus = json['status'] as String;
 
     return jsonResults.map((place) => Place.fromJson(place)).toList();
