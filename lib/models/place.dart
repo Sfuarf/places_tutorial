@@ -9,6 +9,6 @@ class Place {
   factory Place.fromJson(Map<String, dynamic> parsedJson) {
     return Place(
         geometry: Geometry.fromJson(parsedJson['geometry']),
-        name: parsedJson['formatted_address']);
+        name: parsedJson['name']);
   }
 }
