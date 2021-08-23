@@ -42,8 +42,8 @@ class ApplicationBlock with ChangeNotifier {
         name: 'init',
         geometry: Geometry(
             location: Location(
-                lat: currentLocation.latitude, lng: currentLocation.longitude)),
-        vicinity: '');
+                lat: currentLocation.latitude,
+                lng: currentLocation.longitude)));
 
     notifyListeners();
   }
@@ -68,26 +68,36 @@ class ApplicationBlock with ChangeNotifier {
     }
 
     if (placeType != '') {
-      var places = await placesService.getPlaces(
-          initialPosition.geometry.location.lat,
-          initialPosition.geometry.location.lng,
-          placeType);
+      print('The initial position is here?');
+      var places = await placesService
+          .getPlaces(initialPosition.geometry.location.lat,
+              initialPosition.geometry.location.lng, placeType)
+          .then((value) {
+        markers = [];
 
-      markers = [];
+        if (value.length > 0) {
+          var newMarker = markerService.createMarkerFromPlace(value[0]);
 
-      if (places.length > 0) {
-        var newMarker = markerService.createMarkerFromPlace(places[0]);
-        markers.add(newMarker);
-      }
+          print(value[0].geometry.location.lat);
+          markers.add(newMarker);
+        }
 
-      var locationMarker = markerService.createMarkerFromPlace(initialPosition);
-      markers.add(locationMarker);
+        var locationMarker =
+            markerService.createMarkerFromPlace(initialPosition);
+        markers.add(locationMarker);
 
-      var _bounds = markerService.bounds(Set<Marker>.of(markers));
-      bounds.add(_bounds);
+        var _bounds = markerService.bounds(Set<Marker>.of(markers));
+        bounds.add(_bounds);
+
+        return value;
+      }).onError((error, stackTrace) {
+        print('The string being passed was: $placeType');
+        print('An error has occured $error');
+        return [];
+      });
+
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   @override
