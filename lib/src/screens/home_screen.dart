@@ -149,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onSelected: (val) {
                           setState(() {
                             applicationBlock.togglePlaceType('campground', val);
+                            applicationBlock.placesService.validResult = false;
                           });
                         },
                         selected: applicationBlock.placeType == 'campground',
@@ -159,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onSelected: (val) {
                           setState(() {
                             applicationBlock.togglePlaceType('bar', val);
+                            applicationBlock.placesService.validResult = false;
                           });
                         },
                         selected: applicationBlock.placeType == 'bar',
@@ -169,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onSelected: (val) {
                           setState(() {
                             applicationBlock.togglePlaceType('bakery', val);
+                            applicationBlock.placesService.validResult = false;
                           });
                         },
                         selected: applicationBlock.placeType == 'bakery',
@@ -180,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             applicationBlock.togglePlaceType(
                                 'meal_takeaway', val);
+                            applicationBlock.placesService.validResult = false;
                           });
                         },
                         selected: applicationBlock.placeType == 'meal_takeaway',
@@ -190,6 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onSelected: (val) {
                           setState(() {
                             applicationBlock.togglePlaceType('restaurant', val);
+                            applicationBlock.placesService.validResult = false;
                           });
                         },
                         selected: applicationBlock.placeType == 'restaurant',

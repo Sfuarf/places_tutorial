@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,6 +41,7 @@ class ApplicationBlock with ChangeNotifier {
     // Creating 'static' value here - look for other solutions!\
     initialPosition = Place(
         name: 'init',
+        address: 'intial address',
         geometry: Geometry(
             location: Location(
                 lat: currentLocation.latitude,
@@ -75,10 +77,13 @@ class ApplicationBlock with ChangeNotifier {
           .then((value) {
         markers = [];
 
-        if (value.length > 0) {
-          var newMarker = markerService.createMarkerFromPlace(value[0]);
+        // Randomly select an index from the outputted list!
+        Random random = new Random();
+        int randomIndex = random.nextInt((value.length));
 
-          print(value[0].geometry.location.lat);
+        if (value.length > 0) {
+          var newMarker =
+              markerService.createMarkerFromPlace(value[randomIndex]);
           markers.add(newMarker);
         }
 

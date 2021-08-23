@@ -28,7 +28,7 @@ class MarkerService {
     return Marker(
         markerId: MarkerId(markerId),
         draggable: false,
-        infoWindow: InfoWindow(title: place.name, snippet: place.name),
+        infoWindow: InfoWindow(title: place.name, snippet: place.address),
         position:
             LatLng(place.geometry.location.lat, place.geometry.location.lng));
   }
