@@ -15,16 +15,23 @@ class _HomeScreenState extends State<HomeScreen> {
   var _textController = TextEditingController();
 
   late StreamSubscription locationSubscription;
+  late StreamSubscription boundsSubscription;
 
   @override
   void initState() {
     final applicationBlock =
         Provider.of<ApplicationBlock>(context, listen: false);
+    // ignore: cancel_subscriptions
     StreamSubscription locationSubscription =
         applicationBlock.selectedLocation.stream.listen((place) {
       if (place != null) {
         _goToPlace(place);
       }
+    });
+
+    boundsSubscription = applicationBlock.bounds.stream.listen((bounds) async {
+      final GoogleMapController controller = await _mapController.future;
+      controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
     });
     super.initState();
   }
@@ -35,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<ApplicationBlock>(context, listen: false);
     applicationBlock.dispose();
     locationSubscription.cancel();
+    boundsSubscription.cancel();
     super.dispose();
   }
 
@@ -64,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       height: 300.0,
                       child: GoogleMap(
+                        markers: Set<Marker>.of(applicationBlock.markers),
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
                               applicationBlock.currentLocation.latitude,
@@ -121,6 +130,73 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           )
                   ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Find Nearest',
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8.0,
+                    children: [
+                      FilterChip(
+                        label: Text('Camp Ground'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('campground', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'campground',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Bar'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('bar', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'bar',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Bakery'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('bakery', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'bakery',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Take-Away'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType(
+                                'meal_takeaway', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'meal_takeaway',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Restaurant'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('restaurant', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'restaurant',
+                        selectedColor: Colors.blue,
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

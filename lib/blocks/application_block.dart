@@ -2,19 +2,30 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:places_autocomplete/models/geometry.dart';
+import 'package:places_autocomplete/models/location.dart';
 import 'package:places_autocomplete/models/place.dart';
 import 'package:places_autocomplete/models/place_search.dart';
 import 'package:places_autocomplete/services/geolocator_services.dart';
+import 'package:places_autocomplete/services/markers_service.dart';
 import 'package:places_autocomplete/services/places_service.dart';
 
 class ApplicationBlock with ChangeNotifier {
   final geolocatorService = GeolocatorService();
   final placesService = PlacesService();
   StreamController<Place> selectedLocation = StreamController<Place>();
+  StreamController<LatLngBounds> bounds = StreamController<LatLngBounds>();
+  final markerService = MarkerService();
 
   // Variables
   late Position currentLocation;
   late List<PlaceSearch> searchResults;
+  late List<Marker> markers = [];
+  String placeType = '';
+
+  // This is a work-around! Needs to be fixed in the future!
+  late Place initialPosition;
 
   var isGettingPosition = false;
   var isGettingAutoComplete = false;
@@ -25,6 +36,15 @@ class ApplicationBlock with ChangeNotifier {
 
   setCurrentLocation() async {
     currentLocation = await geolocatorService.getCurrentLocation();
+
+    // Creating 'static' value here - look for other solutions!\
+    initialPosition = Place(
+        name: 'init',
+        geometry: Geometry(
+            location: Location(
+                lat: currentLocation.latitude, lng: currentLocation.longitude)),
+        vicinity: '');
+
     notifyListeners();
   }
 
@@ -34,7 +54,39 @@ class ApplicationBlock with ChangeNotifier {
   }
 
   setSelectedLocation(String placeId) async {
-    selectedLocation.add(await placesService.getPlace(placeId));
+    var sLocation = await placesService.getPlace(placeId);
+    selectedLocation.add(sLocation);
+    initialPosition = sLocation;
+    notifyListeners();
+  }
+
+  togglePlaceType(String value, bool selected) async {
+    if (selected) {
+      placeType = value;
+    } else {
+      placeType = '';
+    }
+
+    if (placeType != '') {
+      var places = await placesService.getPlaces(
+          initialPosition.geometry.location.lat,
+          initialPosition.geometry.location.lng,
+          placeType);
+
+      markers = [];
+
+      if (places.length > 0) {
+        var newMarker = markerService.createMarkerFromPlace(places[0]);
+        markers.add(newMarker);
+      }
+
+      var locationMarker = markerService.createMarkerFromPlace(initialPosition);
+      markers.add(locationMarker);
+
+      var _bounds = markerService.bounds(Set<Marker>.of(markers));
+      bounds.add(_bounds);
+    }
+
     notifyListeners();
   }
 
