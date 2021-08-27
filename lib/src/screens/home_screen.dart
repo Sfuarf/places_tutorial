@@ -160,16 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         selectedColor: Colors.blue,
                       ),
                       FilterChip(
-                        label: Text('Camp Ground'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.togglePlaceType('campground', val);
-                          });
-                        },
-                        selected: applicationBlock.placeType == 'campground',
-                        selectedColor: Colors.blue,
-                      ),
-                      FilterChip(
                         label: Text('Bar'),
                         onSelected: (val) {
                           setState(() {
