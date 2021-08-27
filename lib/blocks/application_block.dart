@@ -29,6 +29,8 @@ class ApplicationBlock with ChangeNotifier {
   List<String> placeTypes = [];
 
   String finalSelectedDestination = '';
+  String finalSelectedPlaceType = '';
+  late Place selectedPlace;
 
   // This is a work-around! Needs to be fixed in the future!
   late Place initialPosition;
@@ -74,6 +76,55 @@ class ApplicationBlock with ChangeNotifier {
       placeTypes.remove(value);
     }
     print(placeTypes);
+  }
+
+  searchPlace() async {
+    if (placeTypes.isEmpty) {
+      finalSelectedDestination = '';
+      finalSelectedPlaceType = '';
+      return [];
+    } else {
+      Random randomPlaceType = new Random();
+      int randomPlaceIndex = randomPlaceType.nextInt((placeTypes.length));
+
+      var selectedPlaceType = placeTypes[randomPlaceIndex];
+      finalSelectedPlaceType = selectedPlaceType;
+      print(selectedPlaceType);
+
+      var places = await placesService
+          .getPlaces(initialPosition.geometry.location.lat,
+              initialPosition.geometry.location.lng, selectedPlaceType)
+          .then((value) {
+        markers = [];
+
+        // Randomly select an index from the outputted list!
+        Random randomPlaceIndex = new Random();
+        int randomIndex = randomPlaceIndex.nextInt((value.length));
+
+        finalSelectedDestination = value[randomIndex].name;
+        selectedPlace = value[randomIndex];
+
+        if (value.length > 0) {
+          var newMarker =
+              markerService.createMarkerFromPlace(value[randomIndex]);
+          markers.add(newMarker);
+        }
+
+        var locationMarker =
+            markerService.createMarkerFromPlace(initialPosition);
+        markers.add(locationMarker);
+
+        var _bounds = markerService.bounds(Set<Marker>.of(markers));
+        bounds.add(_bounds);
+
+        return value;
+      }).onError((error, stackTrace) {
+        print('The string being passed was: $placeType');
+        print('An error has occured $error');
+        return [];
+      });
+    }
+    notifyListeners();
   }
 
   togglePlaceType(String value, bool selected) async {

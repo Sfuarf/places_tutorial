@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/blocks/application_block.dart';
 import 'package:places_autocomplete/models/place.dart';
+import 'package:places_autocomplete/models/results_popup.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -148,80 +149,62 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Wrap(
                     spacing: 8.0,
                     children: [
-                      FilterChip(
-                        label: Text('Cafe'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.modifyPlaceType('cafe', val);
-                            applicationBlock.togglePlaceType('cafe', val);
-                            applicationBlock.placesService.validResult = false;
-                          });
-                        },
-                        selected: applicationBlock.placeTypes.contains('cafe'),
-                        selectedColor: Colors.blue,
-                      ),
-                      FilterChip(
-                        label: Text('Bar'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.modifyPlaceType('bar', val);
-                            applicationBlock.togglePlaceType('bar', val);
-                            applicationBlock.placesService.validResult = false;
-                          });
-                        },
-                        selected: applicationBlock.placeTypes.contains('bar'),
-                        selectedColor: Colors.blue,
-                      ),
-                      FilterChip(
-                        label: Text('Bakery'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.modifyPlaceType('bakery', val);
-                            applicationBlock.togglePlaceType('bakery', val);
-                            applicationBlock.placesService.validResult = false;
-                          });
-                        },
-                        selected:
-                            applicationBlock.placeTypes.contains('bakery'),
-                        selectedColor: Colors.blue,
-                      ),
-                      FilterChip(
-                        label: Text('Take-Away'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.modifyPlaceType(
-                                'meal_takeaway', val);
-                            applicationBlock.togglePlaceType(
-                                'meal_takeaway', val);
-                            applicationBlock.placesService.validResult = false;
-                          });
-                        },
-                        selected: applicationBlock.placeTypes
-                            .contains('meal_takeaway'),
-                        selectedColor: Colors.blue,
-                      ),
-                      FilterChip(
-                        label: Text('Restaurant'),
-                        onSelected: (val) {
-                          setState(() {
-                            applicationBlock.modifyPlaceType('restaurant', val);
-                            applicationBlock.togglePlaceType('restaurant', val);
-                            applicationBlock.placesService.validResult = false;
-                          });
-                        },
-                        selected:
-                            applicationBlock.placeTypes.contains('restaurant'),
-                        selectedColor: Colors.blue,
-                      ),
+                      placeTypeChip(applicationBlock, 'Cafe', 'cafe'),
+                      placeTypeChip(applicationBlock, 'Bakery', 'bakery'),
+                      placeTypeChip(
+                          applicationBlock, 'Take-Away', 'meal_takeaway'),
+                      placeTypeChip(
+                          applicationBlock, 'Restaurant', 'restaurant'),
+                      placeTypeChip(applicationBlock, 'Bar', 'bar'),
+                      placeTypeChip(applicationBlock, 'Casino', 'casino'),
+                      placeTypeChip(applicationBlock, 'School', 'school'),
                     ],
                   ),
                 ),
                 (applicationBlock.finalSelectedDestination == '')
                     ? Text('No Location Selected Yet')
                     : Text(
-                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination}')
+                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        applicationBlock.searchPlace();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SelectedLocationPage(
+                                    placeType:
+                                        applicationBlock.finalSelectedPlaceType,
+                                    selectedPlace:
+                                        applicationBlock.selectedPlace)));
+                      },
+                      child: const Text('Get Selected Place'),
+                    ),
+                  ),
+                )
               ],
             ),
+    );
+  }
+
+  // Define the 'Filtered Chip' design to reduce code in main body
+  FilterChip placeTypeChip(
+      ApplicationBlock applicationBlock, String placeText, String placeTypeID) {
+    return FilterChip(
+      label: Text(placeText),
+      onSelected: (val) {
+        setState(
+          () {
+            applicationBlock.modifyPlaceType(placeTypeID, val);
+            // applicationBlock.togglePlaceType(placeTypeID, val);
+            applicationBlock.placesService.validResult = false;
+          },
+        );
+      },
+      selected: applicationBlock.placeTypes.contains(placeTypeID),
+      selectedColor: Colors.blue,
     );
   }
 
