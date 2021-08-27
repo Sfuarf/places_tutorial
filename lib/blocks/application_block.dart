@@ -127,51 +127,6 @@ class ApplicationBlock with ChangeNotifier {
     notifyListeners();
   }
 
-  togglePlaceType(String value, bool selected) async {
-    if (selected) {
-      placeType = value;
-    } else {
-      placeType = '';
-    }
-
-    if (placeType != '') {
-      var places = await placesService
-          .getPlaces(initialPosition.geometry.location.lat,
-              initialPosition.geometry.location.lng, placeType)
-          .then((value) {
-        markers = [];
-
-        // Randomly select an index from the outputted list!
-        Random random = new Random();
-        int randomIndex = random.nextInt((value.length));
-
-        finalSelectedDestination = value[randomIndex].name;
-
-        if (value.length > 0) {
-          var newMarker =
-              markerService.createMarkerFromPlace(value[randomIndex]);
-          markers.add(newMarker);
-        }
-
-        var locationMarker =
-            markerService.createMarkerFromPlace(initialPosition);
-        markers.add(locationMarker);
-
-        var _bounds = markerService.bounds(Set<Marker>.of(markers));
-        bounds.add(_bounds);
-
-        return value;
-      }).onError((error, stackTrace) {
-        print('The string being passed was: $placeType');
-        print('An error has occured $error');
-        return [];
-      });
-    } else {
-      finalSelectedDestination = '';
-    }
-    notifyListeners();
-  }
-
   @override
   void dispose() {
     selectedLocation.close();
