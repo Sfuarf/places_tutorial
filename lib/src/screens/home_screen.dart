@@ -152,56 +152,65 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: Text('Cafe'),
                         onSelected: (val) {
                           setState(() {
+                            applicationBlock.modifyPlaceType('cafe', val);
                             applicationBlock.togglePlaceType('cafe', val);
                             applicationBlock.placesService.validResult = false;
                           });
                         },
-                        selected: applicationBlock.placeType == 'cafe',
+                        selected: applicationBlock.placeTypes.contains('cafe'),
                         selectedColor: Colors.blue,
                       ),
                       FilterChip(
                         label: Text('Bar'),
                         onSelected: (val) {
                           setState(() {
+                            applicationBlock.modifyPlaceType('bar', val);
                             applicationBlock.togglePlaceType('bar', val);
                             applicationBlock.placesService.validResult = false;
                           });
                         },
-                        selected: applicationBlock.placeType == 'bar',
+                        selected: applicationBlock.placeTypes.contains('bar'),
                         selectedColor: Colors.blue,
                       ),
                       FilterChip(
                         label: Text('Bakery'),
                         onSelected: (val) {
                           setState(() {
+                            applicationBlock.modifyPlaceType('bakery', val);
                             applicationBlock.togglePlaceType('bakery', val);
                             applicationBlock.placesService.validResult = false;
                           });
                         },
-                        selected: applicationBlock.placeType == 'bakery',
+                        selected:
+                            applicationBlock.placeTypes.contains('bakery'),
                         selectedColor: Colors.blue,
                       ),
                       FilterChip(
                         label: Text('Take-Away'),
                         onSelected: (val) {
                           setState(() {
+                            applicationBlock.modifyPlaceType(
+                                'meal_takeaway', val);
                             applicationBlock.togglePlaceType(
                                 'meal_takeaway', val);
                             applicationBlock.placesService.validResult = false;
                           });
                         },
-                        selected: applicationBlock.placeType == 'meal_takeaway',
+                        selected: applicationBlock.placeTypes
+                            .contains('meal_takeaway'),
                         selectedColor: Colors.blue,
                       ),
                       FilterChip(
                         label: Text('Restaurant'),
                         onSelected: (val) {
                           setState(() {
+                            applicationBlock.modifyPlaceType('restaurant', val);
                             applicationBlock.togglePlaceType('restaurant', val);
                             applicationBlock.placesService.validResult = false;
                           });
                         },
-                        selected: applicationBlock.placeType == 'restaurant',
+                        selected:
+                            applicationBlock.placeTypes.contains('restaurant'),
                         selectedColor: Colors.blue,
                       ),
                     ],

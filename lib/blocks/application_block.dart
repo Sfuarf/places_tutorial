@@ -25,6 +25,9 @@ class ApplicationBlock with ChangeNotifier {
   late List<Marker> markers = [];
   String placeType = '';
 
+  // Define empty list of strings to hold the place types selected.
+  List<String> placeTypes = [];
+
   String finalSelectedDestination = '';
 
   // This is a work-around! Needs to be fixed in the future!
@@ -64,6 +67,15 @@ class ApplicationBlock with ChangeNotifier {
     notifyListeners();
   }
 
+  modifyPlaceType(String value, bool selected) {
+    if (selected) {
+      placeTypes.add(value);
+    } else {
+      placeTypes.remove(value);
+    }
+    print(placeTypes);
+  }
+
   togglePlaceType(String value, bool selected) async {
     if (selected) {
       placeType = value;
@@ -72,7 +84,6 @@ class ApplicationBlock with ChangeNotifier {
     }
 
     if (placeType != '') {
-      print('The initial position is here?');
       var places = await placesService
           .getPlaces(initialPosition.geometry.location.lat,
               initialPosition.geometry.location.lng, placeType)
