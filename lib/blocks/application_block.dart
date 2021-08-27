@@ -31,12 +31,10 @@ class ApplicationBlock with ChangeNotifier {
   String finalSelectedDestination = '';
   String finalSelectedPlaceType = '';
   late Place selectedPlace;
+  bool selectedPlaceFound = false;
 
   // This is a work-around! Needs to be fixed in the future!
   late Place initialPosition;
-
-  var isGettingPosition = false;
-  var isGettingAutoComplete = false;
 
   ApplicationBlock() {
     setCurrentLocation();
@@ -79,6 +77,7 @@ class ApplicationBlock with ChangeNotifier {
   }
 
   searchPlace() async {
+    selectedPlaceFound = false;
     if (placeTypes.isEmpty) {
       finalSelectedDestination = '';
       finalSelectedPlaceType = '';
@@ -96,6 +95,7 @@ class ApplicationBlock with ChangeNotifier {
               initialPosition.geometry.location.lng, selectedPlaceType)
           .then((value) {
         markers = [];
+        selectedPlaceFound = true;
 
         // Randomly select an index from the outputted list!
         Random randomPlaceIndex = new Random();

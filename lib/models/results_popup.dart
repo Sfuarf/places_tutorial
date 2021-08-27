@@ -4,13 +4,23 @@ import 'package:places_autocomplete/models/place.dart';
 class SelectedLocationPage extends StatelessWidget {
   final Place selectedPlace;
   final String placeType;
+  final bool selectedplaceFound;
 
-  SelectedLocationPage({required this.selectedPlace, required this.placeType});
+  SelectedLocationPage(
+      {required this.selectedplaceFound,
+      required this.selectedPlace,
+      required this.placeType});
 
   @override
   Widget build(BuildContext context) {
-    return (selectedPlace.name.length < 1)
-        ? CircleAvatar()
+    return (!selectedplaceFound)
+        ? Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              child: CircleAvatar(),
+            ),
+          )
         : AlertDialog(
             title: Text('The Selected Place'),
             content: Column(

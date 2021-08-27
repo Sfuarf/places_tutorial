@@ -52,6 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final applicationBlock = Provider.of<ApplicationBlock>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Places App'),
+        centerTitle: true,
+      ),
       body: (!applicationBlock.geolocatorService.taskCompleted)
           ? Center(
               child: CircularProgressIndicator(),
@@ -171,14 +175,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         applicationBlock.searchPlace();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SelectedLocationPage(
-                                    placeType:
-                                        applicationBlock.finalSelectedPlaceType,
-                                    selectedPlace:
-                                        applicationBlock.selectedPlace)));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => SelectedLocationPage(
+                        //             selectedplaceFound:
+                        //                 applicationBlock.selectedPlaceFound,
+                        //             placeType:
+                        //                 applicationBlock.finalSelectedPlaceType,
+                        //             selectedPlace:
+                        //                 applicationBlock.selectedPlace)));
                       },
                       child: const Text('Get Selected Place'),
                     ),
