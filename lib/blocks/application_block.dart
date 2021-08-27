@@ -104,11 +104,10 @@ class ApplicationBlock with ChangeNotifier {
         print('An error has occured $error');
         return [];
       });
-
-      notifyListeners();
     } else {
       finalSelectedDestination = '';
     }
+    notifyListeners();
   }
 
   @override

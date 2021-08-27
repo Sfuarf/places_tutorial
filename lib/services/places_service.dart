@@ -9,6 +9,7 @@ final key = env['KEY'];
 
 class PlacesService {
   bool validResult = false;
+  bool placesValidResult = false;
 
   Future<List<PlaceSearch>> getAutoComplete(String search) async {
     Uri url = Uri.parse(
@@ -57,12 +58,12 @@ class PlacesService {
 
     // Adding error checking for UI reference
     if (jsonStatus == 'OK') {
-      validResult = true;
+      placesValidResult = true;
       print('The Places are Being Found!');
       print(jsonResults.length);
     }
     if (jsonStatus == 'INVALID_REQUEST') {
-      validResult = false;
+      placesValidResult = false;
       print('This is an invalid request');
     }
     // var jsonStatus = json['status'] as String;

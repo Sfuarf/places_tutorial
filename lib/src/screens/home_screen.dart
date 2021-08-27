@@ -121,6 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         .searchResults[index]
                                                         .placeId);
                                             _textController.clear();
+                                            applicationBlock.placeType = '';
+                                            applicationBlock
+                                                .finalSelectedDestination = '';
                                             applicationBlock.placesService
                                                 .validResult = false;
                                           },
@@ -140,85 +143,86 @@ class _HomeScreenState extends State<HomeScreen> {
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                 ),
-                selectTypeOfPlace(applicationBlock),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8.0,
+                    children: [
+                      FilterChip(
+                        label: Text('Cafe'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('cafe', val);
+                            applicationBlock.placesService.validResult = false;
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'cafe',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Camp Ground'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('campground', val);
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'campground',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Bar'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('bar', val);
+                            applicationBlock.placesService.validResult = false;
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'bar',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Bakery'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('bakery', val);
+                            applicationBlock.placesService.validResult = false;
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'bakery',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Take-Away'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType(
+                                'meal_takeaway', val);
+                            applicationBlock.placesService.validResult = false;
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'meal_takeaway',
+                        selectedColor: Colors.blue,
+                      ),
+                      FilterChip(
+                        label: Text('Restaurant'),
+                        onSelected: (val) {
+                          setState(() {
+                            applicationBlock.togglePlaceType('restaurant', val);
+                            applicationBlock.placesService.validResult = false;
+                          });
+                        },
+                        selected: applicationBlock.placeType == 'restaurant',
+                        selectedColor: Colors.blue,
+                      ),
+                    ],
+                  ),
+                ),
                 (applicationBlock.finalSelectedDestination == '')
                     ? Text('No Location Selected Yet')
                     : Text(
                         'The Chosen Place is: ${applicationBlock.finalSelectedDestination}')
               ],
             ),
-    );
-  }
-
-  Padding selectTypeOfPlace(ApplicationBlock applicationBlock) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Wrap(
-        spacing: 8.0,
-        children: [
-          FilterChip(
-            label: Text('Cafe'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('cafe', val);
-                applicationBlock.placesService.validResult = false;
-              });
-            },
-            selected: applicationBlock.placeType == 'cafe',
-            selectedColor: Colors.blue,
-          ),
-          FilterChip(
-            label: Text('Camp Ground'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('campground', val);
-              });
-            },
-            selected: applicationBlock.placeType == 'campground',
-            selectedColor: Colors.blue,
-          ),
-          FilterChip(
-            label: Text('Bar'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('bar', val);
-              });
-            },
-            selected: applicationBlock.placeType == 'bar',
-            selectedColor: Colors.blue,
-          ),
-          FilterChip(
-            label: Text('Bakery'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('bakery', val);
-              });
-            },
-            selected: applicationBlock.placeType == 'bakery',
-            selectedColor: Colors.blue,
-          ),
-          FilterChip(
-            label: Text('Take-Away'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('meal_takeaway', val);
-              });
-            },
-            selected: applicationBlock.placeType == 'meal_takeaway',
-            selectedColor: Colors.blue,
-          ),
-          FilterChip(
-            label: Text('Restaurant'),
-            onSelected: (val) {
-              setState(() {
-                applicationBlock.togglePlaceType('restaurant', val);
-              });
-            },
-            selected: applicationBlock.placeType == 'restaurant',
-            selectedColor: Colors.blue,
-          ),
-        ],
-      ),
     );
   }
 
