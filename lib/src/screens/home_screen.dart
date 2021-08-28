@@ -32,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     boundsSubscription = applicationBlock.bounds.stream.listen((bounds) async {
       final GoogleMapController controller = await _mapController.future;
-      controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
+      controller.animateCamera(
+          CameraUpdate.newLatLngBounds(bounds, 50.0), CameraUpdate.zoomTo(14));
+      controller.animateCamera(CameraUpdate.zoomTo(14));
     });
     super.initState();
   }
