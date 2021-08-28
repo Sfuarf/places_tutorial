@@ -110,9 +110,9 @@ class ApplicationBlock with ChangeNotifier {
           markers.add(newMarker);
         }
 
-        var locationMarker =
-            markerService.createMarkerFromPlace(initialPosition);
-        markers.add(locationMarker);
+        // var locationMarker =
+        //     markerService.createMarkerFromPlace(initialPosition);
+        // markers.add(locationMarker);
 
         var _bounds = markerService.bounds(Set<Marker>.of(markers));
         bounds.add(_bounds);

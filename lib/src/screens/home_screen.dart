@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Places App'),
+        title: const Text('Decision maker'),
         centerTitle: true,
       ),
       body: (!applicationBlock.geolocatorService.taskCompleted)
@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         //             selectedPlace:
                         //                 applicationBlock.selectedPlace)));
                       },
-                      child: const Text('Get Selected Place'),
+                      child: const Text('Find New Place!'),
                     ),
                   ),
                 )
