@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/blocks/application_block.dart';
 import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/place.dart';
-import 'package:places_autocomplete/models/results_popup.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
