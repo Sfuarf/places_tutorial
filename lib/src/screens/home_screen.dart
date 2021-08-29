@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/blocks/application_block.dart';
+import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/place.dart';
-import 'package:places_autocomplete/models/results_popup.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -127,6 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .finalSelectedDestination = '';
                                             applicationBlock.placesService
                                                 .validResult = false;
+                                            // Hide the keyboard when pressed!
+                                            FocusScope.of(context).unfocus();
                                           },
                                         );
                                       }),
@@ -157,14 +159,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           applicationBlock, 'Restaurant', 'restaurant'),
                       placeTypeChip(applicationBlock, 'Bar', 'bar'),
                       placeTypeChip(applicationBlock, 'Casino', 'casino'),
-                      placeTypeChip(applicationBlock, 'School', 'school'),
                     ],
                   ),
                 ),
                 (applicationBlock.finalSelectedDestination == '')
                     ? Text('No Location Selected Yet')
-                    : Text(
-                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
+                    : Column(children: [
+                        Text(
+                            'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
+                        Text(
+                            'Rating: ${applicationBlock.selectedPlace.rating}'),
+                      ]),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
@@ -205,13 +210,12 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(
           () {
             applicationBlock.modifyPlaceType(placeTypeID, val);
-            // applicationBlock.togglePlaceType(placeTypeID, val);
             applicationBlock.placesService.validResult = false;
           },
         );
       },
       selected: applicationBlock.placeTypes.contains(placeTypeID),
-      selectedColor: Colors.blue,
+      selectedColor: Colors.green,
     );
   }
 
@@ -225,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
         zoom: 14)));
   }
 
-  Future<void> _goTonewSelectedPlace(Place place) async {
+  Future<void> _goTonewSelectedPlace(Attraction place) async {
     final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(

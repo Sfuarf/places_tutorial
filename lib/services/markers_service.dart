@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/place.dart';
 
 class MarkerService {
@@ -23,10 +24,10 @@ class MarkerService {
         northeast: LatLng(northeastLat, northeastLon));
   }
 
-  Marker createMarkerFromPlace(Place place) {
+  Marker createMarkerFromPlace(Attraction place) {
     var markerId = place.name;
 
-    String snippetText = place.address;
+    String snippetText = 'Rating: ' + place.rating.toString();
 
     return Marker(
       markerId: MarkerId(markerId),

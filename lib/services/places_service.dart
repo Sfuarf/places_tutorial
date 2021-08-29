@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/place.dart';
 
 import 'package:places_autocomplete/models/place_search.dart';
@@ -45,11 +46,13 @@ class PlacesService {
     return Place.fromJson(jsonResult);
   }
 
-  // For places - not autocomplete!
-  Future<List<Place>> getPlaces(
+  // For Attractions - not autocomplete!!
+  Future<List<Attraction>> getAttractions(
       double lat, double lon, String placeType) async {
     Uri url = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/textsearch/json?type=$placeType&location=$lat,$lon&rankby=distance&key=$key');
+
+    print(url);
 
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
@@ -68,6 +71,6 @@ class PlacesService {
     }
     // var jsonStatus = json['status'] as String;
 
-    return jsonResults.map((place) => Place.fromJson(place)).toList();
+    return jsonResults.map((place) => Attraction.fromJson(place)).toList();
   }
 }
