@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 (applicationBlock.finalSelectedDestination == '')
                     ? Text('No Location Selected Yet')
                     : Text(
-                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
+                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination} + Rating: ${applicationBlock.selectedPlace.rating} + ${applicationBlock.selectedPlace.openNow.openNow}'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
