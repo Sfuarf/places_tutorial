@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/blocks/application_block.dart';
+import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/place.dart';
 import 'package:places_autocomplete/models/results_popup.dart';
 import 'package:provider/provider.dart';
@@ -225,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
         zoom: 14)));
   }
 
-  Future<void> _goTonewSelectedPlace(Place place) async {
+  Future<void> _goTonewSelectedPlace(Attraction place) async {
     final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(

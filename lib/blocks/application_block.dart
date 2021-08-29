@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:places_autocomplete/models/attraction.dart';
 import 'package:places_autocomplete/models/geometry.dart';
 import 'package:places_autocomplete/models/location.dart';
 import 'package:places_autocomplete/models/place.dart';
@@ -30,7 +31,7 @@ class ApplicationBlock with ChangeNotifier {
 
   String finalSelectedDestination = '';
   String finalSelectedPlaceType = '';
-  late Place selectedPlace;
+  late Attraction selectedPlace;
   bool selectedPlaceFound = false;
 
   // This is a work-around! Needs to be fixed in the future!
@@ -95,7 +96,7 @@ class ApplicationBlock with ChangeNotifier {
       print(selectedPlaceType);
 
       var places = await placesService
-          .getPlaces(initialPosition.geometry.location.lat,
+          .getAttractions(initialPosition.geometry.location.lat,
               initialPosition.geometry.location.lng, selectedPlaceType)
           .then((value) {
         markers = [];
