@@ -128,6 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .finalSelectedDestination = '';
                                             applicationBlock.placesService
                                                 .validResult = false;
+                                            // Hide the keyboard when pressed!
+                                            FocusScope.of(context).unfocus();
                                           },
                                         );
                                       }),
@@ -158,14 +160,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           applicationBlock, 'Restaurant', 'restaurant'),
                       placeTypeChip(applicationBlock, 'Bar', 'bar'),
                       placeTypeChip(applicationBlock, 'Casino', 'casino'),
-                      placeTypeChip(applicationBlock, 'School', 'school'),
                     ],
                   ),
                 ),
                 (applicationBlock.finalSelectedDestination == '')
                     ? Text('No Location Selected Yet')
-                    : Text(
-                        'The Chosen Place is: ${applicationBlock.finalSelectedDestination} + Rating: ${applicationBlock.selectedPlace.rating} + ${applicationBlock.selectedPlace.openNow.openNow}'),
+                    : Column(children: [
+                        Text(
+                            'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
+                        Text(
+                            'Rating: ${applicationBlock.selectedPlace.rating}'),
+                        (applicationBlock.selectedPlace.openNow.openNow)
+                            ? Text('Currently Open')
+                            : Text('Currently Closed'),
+                      ]),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
