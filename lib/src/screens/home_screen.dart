@@ -16,7 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var _textController = TextEditingController();
 
   late StreamSubscription locationSubscription;
-  late StreamSubscription boundsSubscription;
 
   @override
   void initState() {
@@ -30,10 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    // boundsSubscription = applicationBlock.bounds.stream.listen((bounds) async {
-    //   final GoogleMapController controller = await _mapController.future;
-    //   controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
-    // });
     super.initState();
   }
 
@@ -56,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Decision maker'),
         centerTitle: true,
       ),
+      // Wait for the intial position to be found before loading the app
       body: (!applicationBlock.geolocatorService.taskCompleted)
           ? Center(
               child: CircularProgressIndicator(),
