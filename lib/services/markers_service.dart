@@ -26,10 +26,15 @@ class MarkerService {
   Marker createMarkerFromPlace(Place place) {
     var markerId = place.name;
 
+    String snippetText = place.address;
+
     return Marker(
       markerId: MarkerId(markerId),
       draggable: false,
-      infoWindow: InfoWindow(title: place.name, snippet: place.address),
+      infoWindow: InfoWindow(
+        title: place.name,
+        snippet: snippetText,
+      ),
       position:
           LatLng(place.geometry.location.lat, place.geometry.location.lng),
     );

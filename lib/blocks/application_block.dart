@@ -117,7 +117,7 @@ class ApplicationBlock with ChangeNotifier {
         return value;
       }).onError((error, stackTrace) {
         print('The string being passed was: $placeType');
-        print('An error has occured $error');
+        print('This is the current error occuring $error');
         return [];
       });
     }
