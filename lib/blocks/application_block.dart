@@ -35,6 +35,7 @@ class ApplicationBlock with ChangeNotifier {
 
   // This is a work-around! Needs to be fixed in the future!
   late Place initialPosition;
+  late Place newPlaceSelected;
 
   ApplicationBlock() {
     setCurrentLocation();
@@ -83,10 +84,13 @@ class ApplicationBlock with ChangeNotifier {
       finalSelectedPlaceType = '';
       return [];
     } else {
+      // Chose random index of place types selected
       Random randomPlaceType = new Random();
       int randomPlaceIndex = randomPlaceType.nextInt((placeTypes.length));
 
+      // Selected type is then passed into the google search
       var selectedPlaceType = placeTypes[randomPlaceIndex];
+      // Local variable for future reference - might be deleted once 'Place' format is used!
       finalSelectedPlaceType = selectedPlaceType;
       print(selectedPlaceType);
 
@@ -109,13 +113,6 @@ class ApplicationBlock with ChangeNotifier {
               markerService.createMarkerFromPlace(value[randomIndex]);
           markers.add(newMarker);
         }
-
-        // var locationMarker =
-        //     markerService.createMarkerFromPlace(initialPosition);
-        // markers.add(locationMarker);
-
-        var _bounds = markerService.bounds(Set<Marker>.of(markers));
-        bounds.add(_bounds);
 
         return value;
       }).onError((error, stackTrace) {

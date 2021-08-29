@@ -30,11 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    boundsSubscription = applicationBlock.bounds.stream.listen((bounds) async {
-      final GoogleMapController controller = await _mapController.future;
-      controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
-      controller.animateCamera(CameraUpdate.zoomTo(14));
-    });
+    // boundsSubscription = applicationBlock.bounds.stream.listen((bounds) async {
+    //   final GoogleMapController controller = await _mapController.future;
+    //   controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
+    // });
     super.initState();
   }
 
@@ -44,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<ApplicationBlock>(context, listen: false);
     applicationBlock.dispose();
     locationSubscription.cancel();
-    boundsSubscription.cancel();
+    // boundsSubscription.cancel();
     super.dispose();
   }
 
@@ -174,18 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        applicationBlock.searchPlace();
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => SelectedLocationPage(
-                        //             selectedplaceFound:
-                        //                 applicationBlock.selectedPlaceFound,
-                        //             placeType:
-                        //                 applicationBlock.finalSelectedPlaceType,
-                        //             selectedPlace:
-                        //                 applicationBlock.selectedPlace)));
+                      onPressed: () async {
+                        await applicationBlock.searchPlace();
+                        _goToPlace(applicationBlock.selectedPlace);
                       },
                       child: const Text('Find New Place!'),
                     ),
@@ -225,3 +215,15 @@ class _HomeScreenState extends State<HomeScreen> {
         zoom: 14)));
   }
 }
+
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => SelectedLocationPage(
+                        //             selectedplaceFound:
+                        //                 applicationBlock.selectedPlaceFound,
+                        //             placeType:
+                        //                 applicationBlock.finalSelectedPlaceType,
+                        //             selectedPlace:
+                        //                 applicationBlock.selectedPlace)));

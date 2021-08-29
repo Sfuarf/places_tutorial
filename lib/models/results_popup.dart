@@ -13,29 +13,22 @@ class SelectedLocationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (!selectedplaceFound)
-        ? Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              child: CircleAvatar(),
-            ),
-          )
-        : AlertDialog(
-            title: Text('The Selected Place'),
-            content: Column(
-              children: [
-                Text('The type selected was: $placeType.'),
-                Text('The name of the place is: ${selectedPlace.name}')
-              ],
-            ),
-            actions: <Widget>[
-                TextButton(
-                  child: const Text('Approve'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ]);
+    return AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 300),
+        title: Text('The Selected Place'),
+        content: Column(
+          children: [
+            Text('The type selected was: $placeType.'),
+            Text('The name of the place is: ${selectedPlace.name}')
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Approve'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ]);
   }
 }
