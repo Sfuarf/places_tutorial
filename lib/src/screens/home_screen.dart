@@ -170,9 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             'The Chosen Place is: ${applicationBlock.finalSelectedDestination}'),
                         Text(
                             'Rating: ${applicationBlock.selectedPlace.rating}'),
-                        (applicationBlock.selectedPlace.openNow.openNow)
-                            ? Text('Currently Open')
-                            : Text('Currently Closed'),
                       ]),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -214,13 +211,12 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(
           () {
             applicationBlock.modifyPlaceType(placeTypeID, val);
-            // applicationBlock.togglePlaceType(placeTypeID, val);
             applicationBlock.placesService.validResult = false;
           },
         );
       },
       selected: applicationBlock.placeTypes.contains(placeTypeID),
-      selectedColor: Colors.blue,
+      selectedColor: Colors.green,
     );
   }
 

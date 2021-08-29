@@ -52,6 +52,8 @@ class PlacesService {
     Uri url = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/textsearch/json?type=$placeType&location=$lat,$lon&rankby=distance&key=$key');
 
+    print(url);
+
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
     var jsonResults = json['results'] as List;
