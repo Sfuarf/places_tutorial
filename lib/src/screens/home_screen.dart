@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         await applicationBlock.searchPlace();
-                        _goToPlace(applicationBlock.selectedPlace);
+                        _goTonewSelectedPlace(applicationBlock.selectedPlace);
 
                         /* Pop up screen to show information - this will be updated with more information!
                            Currently just a place holder */
@@ -216,6 +216,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _goToPlace(Place place) async {
+    final GoogleMapController controller = await _mapController.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(
+          place.geometry.location.lat,
+          place.geometry.location.lng,
+        ),
+        zoom: 14)));
+  }
+
+  Future<void> _goTonewSelectedPlace(Place place) async {
     final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(
