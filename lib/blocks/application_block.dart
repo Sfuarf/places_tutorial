@@ -25,13 +25,16 @@ class ApplicationBlock with ChangeNotifier {
   late List<Marker> markers = [];
   String placeType = '';
 
+  // Define empty list of strings to hold the place types selected.
+  List<String> placeTypes = [];
+
   String finalSelectedDestination = '';
+  String finalSelectedPlaceType = '';
+  late Place selectedPlace;
+  bool selectedPlaceFound = false;
 
   // This is a work-around! Needs to be fixed in the future!
   late Place initialPosition;
-
-  var isGettingPosition = false;
-  var isGettingAutoComplete = false;
 
   ApplicationBlock() {
     setCurrentLocation();
@@ -64,26 +67,42 @@ class ApplicationBlock with ChangeNotifier {
     notifyListeners();
   }
 
-  togglePlaceType(String value, bool selected) async {
+  modifyPlaceType(String value, bool selected) {
     if (selected) {
-      placeType = value;
+      placeTypes.add(value);
     } else {
-      placeType = '';
+      placeTypes.remove(value);
     }
+    print(placeTypes);
+  }
 
-    if (placeType != '') {
-      print('The initial position is here?');
+  searchPlace() async {
+    selectedPlaceFound = false;
+    if (placeTypes.isEmpty) {
+      finalSelectedDestination = '';
+      finalSelectedPlaceType = '';
+      return [];
+    } else {
+      Random randomPlaceType = new Random();
+      int randomPlaceIndex = randomPlaceType.nextInt((placeTypes.length));
+
+      var selectedPlaceType = placeTypes[randomPlaceIndex];
+      finalSelectedPlaceType = selectedPlaceType;
+      print(selectedPlaceType);
+
       var places = await placesService
           .getPlaces(initialPosition.geometry.location.lat,
-              initialPosition.geometry.location.lng, placeType)
+              initialPosition.geometry.location.lng, selectedPlaceType)
           .then((value) {
         markers = [];
+        selectedPlaceFound = true;
 
         // Randomly select an index from the outputted list!
-        Random random = new Random();
-        int randomIndex = random.nextInt((value.length));
+        Random randomPlaceIndex = new Random();
+        int randomIndex = randomPlaceIndex.nextInt((value.length));
 
         finalSelectedDestination = value[randomIndex].name;
+        selectedPlace = value[randomIndex];
 
         if (value.length > 0) {
           var newMarker =
@@ -91,9 +110,9 @@ class ApplicationBlock with ChangeNotifier {
           markers.add(newMarker);
         }
 
-        var locationMarker =
-            markerService.createMarkerFromPlace(initialPosition);
-        markers.add(locationMarker);
+        // var locationMarker =
+        //     markerService.createMarkerFromPlace(initialPosition);
+        // markers.add(locationMarker);
 
         var _bounds = markerService.bounds(Set<Marker>.of(markers));
         bounds.add(_bounds);
@@ -104,8 +123,6 @@ class ApplicationBlock with ChangeNotifier {
         print('An error has occured $error');
         return [];
       });
-    } else {
-      finalSelectedDestination = '';
     }
     notifyListeners();
   }

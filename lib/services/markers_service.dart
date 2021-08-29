@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:places_autocomplete/models/place.dart';
 
@@ -26,10 +27,11 @@ class MarkerService {
     var markerId = place.name;
 
     return Marker(
-        markerId: MarkerId(markerId),
-        draggable: false,
-        infoWindow: InfoWindow(title: place.name, snippet: place.address),
-        position:
-            LatLng(place.geometry.location.lat, place.geometry.location.lng));
+      markerId: MarkerId(markerId),
+      draggable: false,
+      infoWindow: InfoWindow(title: place.name, snippet: place.address),
+      position:
+          LatLng(place.geometry.location.lat, place.geometry.location.lng),
+    );
   }
 }
