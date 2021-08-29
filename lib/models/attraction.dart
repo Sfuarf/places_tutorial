@@ -1,5 +1,4 @@
 import 'package:places_autocomplete/models/OpenNow.dart';
-import 'package:places_autocomplete/models/OpeningHours.dart';
 import 'package:places_autocomplete/models/geometry.dart';
 
 class Attraction {
