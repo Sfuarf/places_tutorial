@@ -172,6 +172,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () async {
                         await applicationBlock.searchPlace();
                         _goToPlace(applicationBlock.selectedPlace);
+
+                        /* Pop up screen to show information - this will be updated with more information!
+                           Currently just a place holder */
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => SelectedLocationPage(
+                        //             selectedplaceFound:
+                        //                 applicationBlock.selectedPlaceFound,
+                        //             placeType:
+                        //                 applicationBlock.finalSelectedPlaceType,
+                        //             selectedPlace:
+                        //                 applicationBlock.selectedPlace)));
                       },
                       child: const Text('Find New Place!'),
                     ),
@@ -208,18 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
           place.geometry.location.lat,
           place.geometry.location.lng,
         ),
-        zoom: 14)));
+        zoom: 15)));
   }
 }
-
-
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => SelectedLocationPage(
-                        //             selectedplaceFound:
-                        //                 applicationBlock.selectedPlaceFound,
-                        //             placeType:
-                        //                 applicationBlock.finalSelectedPlaceType,
-                        //             selectedPlace:
-                        //                 applicationBlock.selectedPlace)));
