@@ -49,8 +49,10 @@ class PlacesService {
   // For Attractions - not autocomplete!!
   Future<List<Attraction>> getAttractions(
       double lat, double lon, String placeType) async {
+    String openCondition = '&opennow';
+
     Uri url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/place/textsearch/json?type=$placeType&location=$lat,$lon&rankby=distance&key=$key');
+        'https://maps.googleapis.com/maps/api/place/textsearch/json?type=$placeType&location=$lat,$lon&rankby=distance&key=$key$openCondition');
 
     print(url);
 
